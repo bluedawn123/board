@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
-import { Table } from 'react-bootstrap';
+import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
-import Axios from 'axios';
+import Axios from "axios";
 
-// const submitTest = ()=> {
-//   Axios.get('http://localhost:8000/')
-//   .then(function (response) {
-//     // 성공 핸들링
-//     alert('등록완료');
-//     console.log(response);
-//   })
-//   .catch(function (error) {
-//     // 에러 핸들링
-//     console.log(error);
-//   });
-// }
-
+/*
+const submitTest = ()=>{
+  //react->서버 요청을 보내고, 그 결과를 출력
+  Axios.get('http://localhost:8000/')
+  .then(function (response) {
+    alert('등록 완료!');
+    console.log(response);
+  })
+  .catch(function (error) {
+    // 에러 핸들링
+    console.log(error);
+  });
+}
+*/
 class Board extends Component {
   render() {
     return (
@@ -29,60 +30,55 @@ class Board extends Component {
   }
 }
 
-
-
 export default class BoardList extends Component {
   state = {
-    BoardList : []
+    BoardList:[]
   }
-  getList = () => {
+  getList = ()=>{
     Axios.get('http://localhost:8000/list')
-    .then( (res) => {
-      // 성공 핸들링
-      // const data = res.data;
-      const {data} = res;
+    .then((res) => {
+      //const data = res.data;  
+      const {data} = res;  //destructuring 비구조할당
       this.setState({
-        BoardList : data
+        BoardList:data
       })
     })
-    .catch(function (error) {
+    .catch((e)=> {
       // 에러 핸들링
-      console.log(error);
-    });
+      console.log(e);
+    });  
   }
   componentDidMount(){
-    this.getList();
+    this.getList(); 
   }
-
+  
   render() {
-    // console.log(this.state.BoardList);
+    console.log(this.state.BoardList);
     return (
-    <>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>번호</th>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>작성일</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            this.state.BoardList.map(item => {
-                return <Board key={item.BOARD_ID} title={item.BOARD_TITLE} registerId={item.REGISTER_ID} date={item.REGISTER_DATE}/>
-            })
-          }
-
-        </tbody>
-      </Table>
-      <div className='d-flex gap-1'>
-        {/* <Button variant="primary" onClick={submitTest}>글쓰기</Button> */}
-        <Button variant="primary" >글쓰기</Button>
-        <Button variant="secondary">수정하기</Button>
-        <Button variant="danger">삭제하기</Button>
-      </div>
-    </>
+      <>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>제목</th>
+              <th>작성자</th>
+              <th>작성일</th>
+            </tr>
+          </thead>
+          <tbody>
+           {
+              this.state.BoardList.map(
+                item=><Board key={item.BOARD_ID} title={item.BOARD_TITLE} registerId={item.REGISTER_ID} date={item.REGISTER_DATE}/>
+              )
+           }          
+          </tbody>
+        </Table>
+        <div className="d-flex gap-1">
+          <Button variant="primary">글쓰기</Button>
+          <Button variant="secondary">수정하기</Button>
+          <Button variant="danger">삭제하기</Button>
+        </div>      
+      </>
     )
   }
 }
