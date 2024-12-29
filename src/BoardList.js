@@ -16,8 +16,46 @@ import Axios from 'axios';
 //   });
 // }
 
-export default class BoardList extends Component {
+class Board extends Component {
   render() {
+    return (
+      <tr>
+        <td>1</td>
+        <td>{this.props.title}</td>
+        <td>{this.props.registerId}</td>
+        <td>{this.props.date}</td>
+      </tr>
+    )
+  }
+}
+
+
+
+export default class BoardList extends Component {
+  state = {
+    BoardList : []
+  }
+  getList = () => {
+    Axios.get('http://localhost:8000/list')
+    .then( (res) => {
+      // 성공 핸들링
+      // const data = res.data;
+      const {data} = res;
+      this.setState({
+        BoardList : data
+      })
+    })
+    .catch(function (error) {
+      // 에러 핸들링
+      console.log(error);
+    });
+  }
+  componentDidMount(){
+    this.getList();
+  }
+
+  render() {
+    // console.log(this.state.BoardList);
     return (
     <>
       <Table striped bordered hover>
@@ -30,24 +68,12 @@ export default class BoardList extends Component {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>안녕하세요</td>
-            <td>Otto맘</td>
-            <td>2024.12.12</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>안녕하세요</td>
-            <td>Otto맘</td>
-            <td>2024.12.12</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>안녕하세요</td>
-            <td>Otto맘</td>
-            <td>2024.12.12</td>
-          </tr>
+          {
+            this.state.BoardList.map(item => {
+                return <Board key={item.BOARD_ID} title={item.BOARD_TITLE} registerId={item.REGISTER_ID} date={item.REGISTER_DATE}/>
+            })
+          }
+
         </tbody>
       </Table>
       <div className='d-flex gap-1'>
