@@ -1,8 +1,28 @@
 import React, { Component } from 'react'
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Axios from 'axios';
 
 export default class Write extends Component {
+  state={
+    isModifyMode:false,
+    title:'',
+    content:''
+  }
+  write = () => {
+    Axios.post('http://localhost:8000/insert',{
+      title : this.state.title,
+      content : this.state.content
+    })
+    .then( (res) => {
+      console.log(res);
+    })
+    .catch(function (error) {
+      // 에러 핸들링
+      console.log(error);
+    });
+  }
+
   render() {
     return (
       <Form>
